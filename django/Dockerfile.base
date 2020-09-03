@@ -1,0 +1,13 @@
+FROM python:3.8.0-alpine
+
+ENV APP_PATH /opt/apps
+
+COPY requirements.base.txt $APP_PATH/
+
+RUN \
+ apk add --no-cache postgresql-libs && \
+ apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
+ pip install --no-cache-dir -r $APP_PATH/requirements.base.txt && \
+ apk --purge del .build-deps
+
+WORKDIR $APP_PATH
